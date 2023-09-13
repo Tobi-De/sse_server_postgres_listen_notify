@@ -58,7 +58,7 @@ postgres_notify(
 )
 ```
 
-**channel_name**: The PostgreSQL channel to use for sending the message (The same you specified in the template above).
+**channel_name**: The PostgreSQL channel to use for sending the message (The same you specified in the html template above).
 
 **sse_event**: A Python dictionary containing all the details of the SSE event. For a complete list of available options, refer to [this class definition](https://github.com/sysid/sse-starlette/blob/main/sse_starlette/sse.py#L50).
 
