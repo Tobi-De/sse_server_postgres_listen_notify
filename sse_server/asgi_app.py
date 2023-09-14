@@ -20,16 +20,15 @@ async def event_publisher(req: Request):
         **connection_params,
         autocommit=True,
     )
-    channel_name = req.query_params.get("channel_name")
-    if not channel_name:
+    channel = req.query_params.get("channel")
+    if not channel:
         return
 
     async with aconnection.cursor() as acursor:
-        await acursor.execute(f"LISTEN {channel_name}")
-        gen = aconnection.notifies()
-        async for notify_message in gen:
-            payload = json.loads(notify_message.payload)
-            yield ServerSentEvent(**payload)
+        await acursor.execute(f"LISTEN {channel}")
+        generator = aconnection.notifies()
+        async for notify_message in generator:
+            yield ServerSentEvent(**json.loads(notify_message.payload))
 
 
 async def sse(request: Request):

@@ -31,11 +31,11 @@ This example uses the [htmx SSE extension](https://htmx.org/extensions/server-se
 
 ```html
 <div hx-ext="sse" 
-    sse-connect="{{sse_server_url}}/?channel_name={{ channel_name }}">
+    sse-connect="{{sse_server_url}}/?channel={{ postgres_sse_channel }}">
 </div>
 ```
 
-**channel_name**: The name of the PostgreSQL channel for listening to messages.
+**channel**: The name of the PostgreSQL channel for listening to messages.
 
 ## Running the SSE Server
 
@@ -49,8 +49,8 @@ python manage.py sse_serve
 from sse_server.utils import postgres_notify
 
 postgres_notify(
-    channel_name="Notifications",
-    sse_event={
+    channel="Notifications",
+    sse_payload={
         "event": "NEW_NOTIFICATION",
         "id": 1,
         "data": json.dumps({"message": "A new notification"}),
@@ -58,9 +58,17 @@ postgres_notify(
 )
 ```
 
-**channel_name**: The PostgreSQL channel to use for sending the message (The same you specified in the html template above).
+**channel**: The PostgreSQL channel to use for sending the message (The same you specified in the template above).
 
-**sse_event**: A Python dictionary containing all the details of the SSE event. For a complete list of available options, refer to [this class definition](https://github.com/sysid/sse-starlette/blob/main/sse_starlette/sse.py#L50).
+**sse_payload**: A Python dictionary containing all the details of the SSE event. For a complete list of available options, refer to [this class definition](https://github.com/sysid/sse-starlette/blob/main/sse_starlette/sse.py#L50).
+
+To keep things running smoothly, it's a good idea to avoid using overly lengthy channel names, excessively large payloads for postgre `notify messages`, and excessively bulky data for SSE event payloads, as there are size limitations for each of these aspects. If you find yourself needing to retrieve a hefty database object, consider sending just the key and fetching the full data on the frontend using another request (such as an htmx request). While this extra request may not be the most ideal solution, for simplicity's sake it's often a worthwhile trade-off.
+At my workplace, we implemented a straightforward real-time notification system using this approach, successfully transmitting all the necessary notification data without any issues. However, it's essential to be aware of the potential risk of sending overly large data. For more in-depth information, you can refer to the following links:
+
+- [Postgres Notify](https://www.postgresql.org/docs/15/sql-notify.html)
+- [Postgres Listen](https://www.postgresql.org/docs/current/sql-listen.html)
+- [Server Sent Events](https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events)
+
 
 ## Optional: sse_server_url Context Processor
 
