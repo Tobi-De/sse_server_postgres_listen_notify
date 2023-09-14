@@ -5,7 +5,7 @@ This project has one main goal: to grab events from PostgreSQL and shoot them st
 Just a heads up, this is best suited for simpler tasks. If you're planning some fancy, complex business logic (especially if it involves Django models) around the sse stuff, this is probably not what you need.
 
 **Note**:
-This is not a package; you should copy-paste the code and adapt it for your project.Depending on where you paste the code source for the app, you may need to update some paths:
+This is not a package; you should copy-paste the code and adapt it for your project. Depending on where you paste the code source for the app, you may need to update some paths:
 - In `sse_server/management/commands/sse_serve.py`, make sure you update `sse_server.asgi_app:app` to `myproject.sse_server.asgi_app:app` within the uvicorn path.
 - Also, in `sse_server/apps.py`, change sse_server to `myproject.sse_server` in the app_name property.
 
