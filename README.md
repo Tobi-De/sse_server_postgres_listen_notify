@@ -1,5 +1,7 @@
  # sse_server_postgres_listen_notify
 
+> **Update**: I've made a package (and a docker image) out of this https://github.com/Tobi-De/sse_relay_server
+
 This project has one main goal: to grab events from PostgreSQL and shoot them straight to your browser using Server-Sent Events (SSE). It's like an alternative route compared to what's explained [here](https://valberg.dk/django-sse-postgresql-listen-notify.html). Instead of diving deep into async views and the new StreamingHttpResponse from Django 4.2, we use a Starlette application to handle sse connections. In my experience, it's more stable and just as easy to set up. Plus, it keeps our Django project free from the async mess.
 
 Just a heads up, this is best suited for simpler tasks. If you're planning some fancy, complex business logic (especially if it involves Django models) around the sse stuff, this is probably not what you need.
